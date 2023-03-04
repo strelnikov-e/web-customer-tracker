@@ -6,6 +6,13 @@
 
 <head>
 	<title>ListCustomers</title>
+	
+	<!-- reference out style sheet -->
+	
+	<link type="text/css"
+			rel="stylesheet"
+			href="${pageContext.request.contextPath}/resources/css/style.css"/>
+
 </head>
 
 <body>
