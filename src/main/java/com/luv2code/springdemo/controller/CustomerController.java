@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.luv2code.springdemo.entity.Customer;
@@ -30,4 +32,23 @@ public class CustomerController {
 		
 		return "list-customers";
 	}
+	
+	@GetMapping("/showFormForAdd")
+	public String showFormForAdd(Model theModel) {
+		
+		// create model attribute to bind form data
+		Customer customer = new Customer();
+		
+		theModel.addAttribute("customer", customer);
+		
+		return "customer-form";
 	}
+	
+	// maping to <form:form action="saveCustomer" modeAttribute="customer" method="POSt" in customer-form.jsp
+	@PostMapping("/saveCustomer")
+	public String saveCustomer(@ModelAttribute("customer") Customer theCustomer) {
+		
+		customerService.saveCustomer(theCustomer);
+		return "redirect:/customer/list";
+	}
+}
