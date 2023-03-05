@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.luv2code.springdemo.entity.Customer;
+import com.luv2code.springdemo.util.SortUtils;
 
 @Repository
 public class CustomerDAOImpl implements CustomerDAO {
@@ -18,13 +19,31 @@ public class CustomerDAOImpl implements CustomerDAO {
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public List<Customer> getCustomers() {
+	public List<Customer> getCustomers(int theSortField) {
 		
 		// get the current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 		
+		String theFieldName = null;
+		
+		switch (theSortField) {
+			case SortUtils.FIRST_NAME:
+				theFieldName = "firstName";
+				break;
+			case SortUtils.LAST_NAME:
+				theFieldName = "lastName";
+				break;
+			case SortUtils.EMAIL:
+				theFieldName = "email";
+				break;
+			default:
+				theFieldName = "lastName";
+		}
+		
 		// create a query, sort by last name
-		Query<Customer> theQuery = currentSession.createQuery("from Customer order by lastName", Customer.class);
+		String queryString = "from Customer order by " + theFieldName;
+		Query<Customer> theQuery = currentSession.createQuery(queryString, Customer.class);
+
 		
 		// execute a query and get result list
 		List<Customer> customers = theQuery.getResultList();
