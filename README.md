@@ -8,5 +8,10 @@ Application has next functions:
  - update customer;
  - search customer by first name or last name with substrings;
  - sort customer table by name, last name or email.
+
+Application layout:
+
 ![Application layout](https://github.com/strelnikov-e/web-customer-tracker/blob/main/images/web-customer-tracker%20layout.png?raw=true)
+
+Web interface:
 ![Main web page](https://github.com/strelnikov-e/web-customer-tracker/blob/main/images/Interface.png?raw=true)
