@@ -76,7 +76,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public void deleteCustomer(int theId) {
 		
 		Session currentSession = sessionFactory.getCurrentSession();
-		Query theQuery = currentSession.createQuery("delete from Customer where id=:customerId");
+		Query<?> theQuery = currentSession.createQuery("delete from Customer where id=:customerId");
 		theQuery.setParameter("customerId", theId);
 		
 		theQuery.executeUpdate();
@@ -86,7 +86,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public List<Customer> searchCustomers(String theSearchName) {
 		Session currentSession = sessionFactory.getCurrentSession();
 		
-		Query theQuery = null;
+		Query<Customer> theQuery = null;
 		
 		// only search by name if theSearchName is not empty
 		if (theSearchName != null && theSearchName.trim().length() > 0) {
