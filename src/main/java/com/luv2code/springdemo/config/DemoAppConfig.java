@@ -59,8 +59,8 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		} catch (PropertyVetoException e) {
 			throw new RuntimeException(e);
 		}
-		logger.info(">>> url: " + env.getProperty("jdbc.url"));
-		logger.info(">>> user name: " + env.getProperty("user"));
+		logger.info("\n>>> url: " + env.getProperty("jdbc.url"));
+		logger.info("\n>>> user name: " + env.getProperty("user"));
 		
 		dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
 		dataSource.setUser(env.getProperty("jdbc.user"));
@@ -68,12 +68,40 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		
 		// set connection pool properties
 		dataSource.setInitialPoolSize(toInteger("connection.pool.initialPoolSize"));
-		dataSource.setInitialPoolSize(toInteger("connection.pool.minPoolSize"));
-		dataSource.setInitialPoolSize(toInteger("connection.pool.maxPoolSize"));
-		dataSource.setInitialPoolSize(toInteger("connection.pool.maxIdleTime"));
+		dataSource.setMinPoolSize(toInteger("connection.pool.minPoolSize"));
+		dataSource.setMaxPoolSize(toInteger("connection.pool.maxPoolSize"));
+		dataSource.setMaxIdleTime(toInteger("connection.pool.maxIdleTime"));
 
 		return dataSource;
 	}
+	
+	// define a bean for security data source
+//	@Bean
+//	public DataSource securityDataSource() {
+//		ComboPooledDataSource dataSource = new ComboPooledDataSource();
+//		
+//		// set the jdbc driver class
+//		try {
+//			dataSource.setDriverClass(env.getProperty("security.jdbc.driver"));
+//			
+//		} catch (PropertyVetoException e) {
+//			throw new RuntimeException(e);
+//		}
+//		logger.info(">>> url: " + env.getProperty("security.jdbc.url"));
+//		logger.info(">>> user name: " + env.getProperty("user"));
+//		
+//		dataSource.setJdbcUrl(env.getProperty("security.jdbc.url"));
+//		dataSource.setUser(env.getProperty("security.jdbc.user"));
+//		dataSource.setPassword(env.getProperty("security.jdbc.password"));
+//		
+//		// set connection pool properties
+//		dataSource.setInitialPoolSize(toInteger("security.connection.pool.initialPoolSize"));
+//		dataSource.setMinPoolSize(toInteger("security.connection.pool.minPoolSize"));
+//		dataSource.setMaxPoolSize(toInteger("security.connection.pool.maxPoolSize"));
+//		dataSource.setMaxIdleTime(toInteger("security.connection.pool.maxIdleTime"));
+//		
+//		return dataSource;
+//	}
 	
 	private Properties getHibernateProperties() {
 		Properties props = new Properties();
@@ -94,6 +122,17 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		return sessionFactory;
 	}
 	
+//	@Bean
+//	public LocalSessionFactoryBean securitySessionFactory() {
+//		// create session factories
+//		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//		sessionFactory.setDataSource(securityDataSource());
+//		sessionFactory.setPackagesToScan(env.getProperty("hibernate.packagesToScan"));
+//		sessionFactory.setHibernateProperties(getHibernateProperties());
+//		
+//		return sessionFactory;
+//	}
+	
 	@Bean
 	@Autowired
 	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
@@ -103,33 +142,6 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		return transactionManager;
 	}
 	
-	// define a bean for data source
-	@Bean
-	public DataSource securityDataSource() {
-		ComboPooledDataSource dataSource = new ComboPooledDataSource();
-		
-		// set the jdbc driver class
-		try {
-			dataSource.setDriverClass(env.getProperty("security.jdbc.driver"));
-			
-		} catch (PropertyVetoException e) {
-			throw new RuntimeException(e);
-		}
-		logger.info(">>> url: " + env.getProperty("security.jdbc.url"));
-		logger.info(">>> user name: " + env.getProperty("user"));
-		
-		dataSource.setJdbcUrl(env.getProperty("security.jdbc.url"));
-		dataSource.setUser(env.getProperty("security.jdbc.user"));
-		dataSource.setPassword(env.getProperty("security.jdbc.password"));
-		
-		// set connection pool properties
-		dataSource.setInitialPoolSize(toInteger("security.connection.pool.initialPoolSize"));
-		dataSource.setInitialPoolSize(toInteger("security.connection.pool.minPoolSize"));
-		dataSource.setInitialPoolSize(toInteger("security.connection.pool.maxPoolSize"));
-		dataSource.setInitialPoolSize(toInteger("security.connection.pool.maxIdleTime"));
-
-		return dataSource;
-	}
 	
 	
 	@Override
