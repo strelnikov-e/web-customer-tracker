@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.luv2code.springdemo.entity.User;
@@ -13,14 +14,15 @@ import com.luv2code.springdemo.entity.User;
 public class UserDaoImpl implements UserDao {
 	
 	@Autowired
-	SessionFactory sessionFactory;
+	@Qualifier(value = "securitySessionFactory")
+	SessionFactory securitySessionFactory;
 	
 	Logger logger = Logger.getLogger(getClass());
 
 	@Override
 	public User findByUsername(String userName) {
 		// get the current hibernate session
-		Session currentSession = sessionFactory.getCurrentSession();
+		Session currentSession = securitySessionFactory.getCurrentSession();
 
 		// now retrieve/read from database using username
 		Query<User> theQuery = currentSession.createQuery("from User where userName=:uName", User.class);
@@ -39,7 +41,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void save(User user) {
-		Session currentSession = sessionFactory.getCurrentSession();
+		Session currentSession = securitySessionFactory.getCurrentSession();
 		
 		currentSession.saveOrUpdate(user);
 

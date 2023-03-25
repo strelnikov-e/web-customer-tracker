@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.luv2code.springdemo.entity.Role;
@@ -12,6 +13,7 @@ import com.luv2code.springdemo.entity.Role;
 public class RoleDaoImpl implements RoleDao {
 	
 	@Autowired
+	@Qualifier(value = "securitySessionFactory")
 	SessionFactory sessionFactory;
 
 	@Override

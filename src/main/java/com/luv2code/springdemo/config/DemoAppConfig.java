@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -62,6 +63,7 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		logger.info("\n>>> url: " + env.getProperty("jdbc.url"));
 		logger.info("\n>>> user name: " + env.getProperty("user"));
 		
+		// set database connection props
 		dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
 		dataSource.setUser(env.getProperty("jdbc.user"));
 		dataSource.setPassword(env.getProperty("jdbc.password"));
@@ -76,32 +78,34 @@ public class DemoAppConfig implements WebMvcConfigurer{
 	}
 	
 	// define a bean for security data source
-//	@Bean
-//	public DataSource securityDataSource() {
-//		ComboPooledDataSource dataSource = new ComboPooledDataSource();
-//		
-//		// set the jdbc driver class
-//		try {
-//			dataSource.setDriverClass(env.getProperty("security.jdbc.driver"));
-//			
-//		} catch (PropertyVetoException e) {
-//			throw new RuntimeException(e);
-//		}
-//		logger.info(">>> url: " + env.getProperty("security.jdbc.url"));
-//		logger.info(">>> user name: " + env.getProperty("user"));
-//		
-//		dataSource.setJdbcUrl(env.getProperty("security.jdbc.url"));
-//		dataSource.setUser(env.getProperty("security.jdbc.user"));
-//		dataSource.setPassword(env.getProperty("security.jdbc.password"));
-//		
-//		// set connection pool properties
-//		dataSource.setInitialPoolSize(toInteger("security.connection.pool.initialPoolSize"));
-//		dataSource.setMinPoolSize(toInteger("security.connection.pool.minPoolSize"));
-//		dataSource.setMaxPoolSize(toInteger("security.connection.pool.maxPoolSize"));
-//		dataSource.setMaxIdleTime(toInteger("security.connection.pool.maxIdleTime"));
-//		
-//		return dataSource;
-//	}
+	@Bean
+	public DataSource securityDataSource() {
+		ComboPooledDataSource dataSource = new ComboPooledDataSource();
+		
+		// set the jdbc driver class
+		try {
+			dataSource.setDriverClass(env.getProperty("security.jdbc.driver"));
+			
+		} catch (PropertyVetoException e) {
+			throw new RuntimeException(e);
+		}
+		// to make sure that we are reading data from properties
+		logger.info(">>> security url: " + env.getProperty("security.jdbc.url"));
+		logger.info(">>> security user name: " + env.getProperty("security.jdbc.user"));
+		
+		// set database connection props
+		dataSource.setJdbcUrl(env.getProperty("security.jdbc.url"));
+		dataSource.setUser(env.getProperty("security.jdbc.user"));
+		dataSource.setPassword(env.getProperty("security.jdbc.password"));
+		
+		// set connection pool properties
+		dataSource.setInitialPoolSize(toInteger("security.connection.pool.initialPoolSize"));
+		dataSource.setMinPoolSize(toInteger("security.connection.pool.minPoolSize"));
+		dataSource.setMaxPoolSize(toInteger("security.connection.pool.maxPoolSize"));
+		dataSource.setMaxIdleTime(toInteger("security.connection.pool.maxIdleTime"));
+		
+		return dataSource;
+	}
 	
 	private Properties getHibernateProperties() {
 		Properties props = new Properties();
@@ -113,7 +117,7 @@ public class DemoAppConfig implements WebMvcConfigurer{
 	
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
-		// create session factories
+		// create hibernate session factorie based on datasource ad config properties
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setPackagesToScan(env.getProperty("hibernate.packagesToScan"));
@@ -122,27 +126,38 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		return sessionFactory;
 	}
 	
-//	@Bean
-//	public LocalSessionFactoryBean securitySessionFactory() {
-//		// create session factories
-//		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//		sessionFactory.setDataSource(securityDataSource());
-//		sessionFactory.setPackagesToScan(env.getProperty("hibernate.packagesToScan"));
-//		sessionFactory.setHibernateProperties(getHibernateProperties());
-//		
-//		return sessionFactory;
-//	}
-	
 	@Bean
+	public LocalSessionFactoryBean securitySessionFactory() {
+		// create hibernate session factorie based on datasource ad config properties
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(securityDataSource());
+		sessionFactory.setPackagesToScan(env.getProperty("hibernate.packagesToScan"));
+		sessionFactory.setHibernateProperties(getHibernateProperties());
+		
+		return sessionFactory;
+	}
+	
+	@Bean(name = "transactionManager")
 	@Autowired
-	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+	public HibernateTransactionManager transactionManager(
+			@Qualifier("sessionFactory") SessionFactory sessionFactory
+			) {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(sessionFactory);
 		
 		return transactionManager;
 	}
 	
-	
+	@Bean(name = "securityTransactionManager")
+	@Autowired
+	public HibernateTransactionManager securityTransactionManager(
+			@Qualifier("securitySessionFactory") SessionFactory securitySessionFactory
+			) {
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+		transactionManager.setSessionFactory(securitySessionFactory);
+		
+		return transactionManager;
+	}
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

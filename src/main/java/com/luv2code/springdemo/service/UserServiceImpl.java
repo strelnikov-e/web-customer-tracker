@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.luv2code.springdemo.dao.RoleDao;
 import com.luv2code.springdemo.dao.UserDao;
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
-	@Transactional
+	@Transactional("securityTransactionManager")
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userDao.findByUsername(username);
 		if (user == null) {
@@ -48,13 +47,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional("securityTransactionManager")
 	public User findUserByName(String userName) {
 		return userDao.findByUsername(userName);
 	}
 
 	@Override
-	@Transactional
+	@Transactional("securityTransactionManager")
 	public void save(CrmUser crmUser) {
 		User user = new User();
 		// assign user details to the user object
