@@ -137,7 +137,7 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		return sessionFactory;
 	}
 	
-	@Bean(name = "transactionManager")
+	@Bean
 	@Autowired
 	public HibernateTransactionManager transactionManager(
 			@Qualifier("sessionFactory") SessionFactory sessionFactory
@@ -148,7 +148,7 @@ public class DemoAppConfig implements WebMvcConfigurer{
 		return transactionManager;
 	}
 	
-	@Bean(name = "securityTransactionManager")
+	@Bean
 	@Autowired
 	public HibernateTransactionManager securityTransactionManager(
 			@Qualifier("securitySessionFactory") SessionFactory securitySessionFactory

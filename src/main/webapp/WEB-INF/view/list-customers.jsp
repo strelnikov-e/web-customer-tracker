@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ page import="com.luv2code.springdemo.util.SortUtils" %>
 
 <!DOCTYPE html>
@@ -24,17 +25,23 @@
 			<h2>CRM - Customer Relationship Manager</h2>
 		</div>
 	</div>
+	<p>
+		User: <security:authentication property="principal.username"/>
+		<br><br>
+		Role(s): <security:authentication property="principal.authorities"/>
+	</p>
 	
 	<div id="container">
 	
 		<div id="content">
-		
-			<!-- put new button: Add customer -->
 			
+			<security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
+			<!-- put new button: Add customer -->
 			<input type="button" value="Add Customer"
 				onclick="window.location.href='showFormForAdd'; return false;"
 				class="add-button"
 			/>
+			</security:authorize>
 			
 			<!-- add a search form -->
 			<form:form action="search" method="GET">
@@ -84,11 +91,17 @@
 						<td> ${tempCustomer.lastName} </td>
 						<td> ${tempCustomer.email} </td>
 						<td>
+						
+						<security:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
 						<!-- display the update link -->
 						<a href="${updateLink}">Update</a>
+						</security:authorize>
+						
+						<security:authorize access="hasRole('ADMIN')">
 						|
 						<a href="${deleteLink}"
 							onclick="if (!(confirm('Are you sure you want to delete this customer?'))) return false">Delete</a>
+						</security:authorize>
 						</td>
 					</tr>
 					

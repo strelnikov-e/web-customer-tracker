@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 
 import com.luv2code.springdemo.service.UserService;
 
@@ -37,24 +35,14 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter{
 		auth.authenticationProvider(authenticationProvider());
 	}
 	
-//	@Override
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		// use jdbc authentication
-//		auth.jdbcAuthentication().dataSource(securityDataSource)
-//			.usersByUsernameQuery("select username,password,'true' as enabled from user where username=?")
-//			.authoritiesByUsernameQuery("SELECT role.name, 'true' as enabled "
-//					+ "FROM role "
-//					+ "INNER JOIN users_roles ON users_roles.role_id = role.id "
-//					+ "INNER JOIN user ON users_roles.user_id = user.id "
-//					+ "WHERE user.username = ?");
-//	}
-	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// add permits to access login, logout and registration
 		http.authorizeHttpRequests()
 					.requestMatchers("/register/**").permitAll()
-					.anyRequest().authenticated()
+					.requestMatchers("/customer/showForm*").hasAnyRole("MANAGER", "ADMIN")
+					.requestMatchers("/customer/save*").hasAnyRole("MANAGER", "ADMIN")
+					.requestMatchers("/customer/delete").hasAnyRole("ADMIN")
 				.and()
 					.formLogin()
 					.loginPage("/login")
@@ -68,14 +56,7 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter{
 					.accessDeniedPage("/access-denied");
 	}
 
-//	@Bean
-//	public UserDetailsManager userDetailsManager() {
-//		JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
-//		jdbcUserDetailsManager.setDataSource(securityDataSource);
-//		
-//		return jdbcUserDetailsManager; 
-//	}
-//	
+
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

@@ -3,7 +3,6 @@ package com.luv2code.springdemo.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -16,8 +15,6 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	@Qualifier(value = "securitySessionFactory")
 	SessionFactory securitySessionFactory;
-	
-	Logger logger = Logger.getLogger(getClass());
 
 	@Override
 	public User findByUsername(String userName) {
@@ -31,9 +28,7 @@ public class UserDaoImpl implements UserDao {
 		
 		try {
 			user = theQuery.getSingleResult();
-			logger.info("\n****** " + user.getPassword());
 		} catch (Exception e) {
-			logger.info("\n*********** inside daoImpl exception");
 			user = null;
 		}
 		return user;
