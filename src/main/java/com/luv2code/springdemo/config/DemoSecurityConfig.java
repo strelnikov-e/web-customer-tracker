@@ -38,11 +38,14 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// add permits to access login, logout and registration
+		//  matchers should be arranche starting from most specific
 		http.authorizeHttpRequests()
-					.requestMatchers("/register/**").permitAll()
+					
 					.requestMatchers("/customer/showForm*").hasAnyRole("MANAGER", "ADMIN")
 					.requestMatchers("/customer/save*").hasAnyRole("MANAGER", "ADMIN")
 					.requestMatchers("/customer/delete").hasAnyRole("ADMIN")
+					.requestMatchers("/customer/**").hasRole("EMPLOYEE")
+					.requestMatchers("/register/**").permitAll()
 				.and()
 					.formLogin()
 					.loginPage("/login")
