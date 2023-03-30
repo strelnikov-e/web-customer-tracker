@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
 
 
 <!doctype html>
@@ -23,7 +24,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  
+  	
+  	<style>
+		.error {color:red}
+	</style>
 </head>
 	
 	<body>
@@ -36,23 +40,44 @@
 			</div>	
 			<div style="padding-top: 30px" class="panel-body">
 			
-		<form:form action="saveCustomer" modelAttribute="customer" method="POST">
+		<form:form action="saveCustomer" modelAttribute="crmCustomer" method="POST">
+		
+		<!-- Place for messages: error, alert etc ... -->
+					    <div class="form-group">
+					        <div class="col-xs-15">
+					            <div>
+								
+									<!-- Check for registration error -->
+									<c:if test="${creationError != null}">
+								
+										<div class="alert alert-danger col-xs-offset-1 col-xs-10">
+											${creationError}
+										</div>
+		
+									</c:if>
+																			
+					            </div>
+					        </div>
+					    </div>
 		
 		<!-- need to assosiate this data with customer id -->
-		<form:hidden path="id"/>
+			<form:hidden path="id"/>
 			
 			<!-- User name -->
 			<div style="margin-bottom: 25px" class="input-group">	
+				<form:errors path="firstName" cssClass="error" />
 				<form:input path="firstName" placeholder="First name" class="form-control"/>
 			</div>
 			
 			<!-- User name -->
-			<div style="margin-bottom: 25px" class="input-group">	
+			<div style="margin-bottom: 25px" class="input-group">
+				<form:errors path="lastName" cssClass="error" />
 				<form:input path="lastName" placeholder="Last name" class="form-control"/>
 			</div>
 			
 			<!-- User name -->
-			<div style="margin-bottom: 25px" class="input-group">	
+			<div style="margin-bottom: 25px" class="input-group">
+				<form:errors path="email" cssClass="error" />	
 				<form:input path="email" placeholder="Email" class="form-control"/>
 			</div>
 			

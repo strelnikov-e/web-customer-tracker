@@ -21,14 +21,28 @@
 	</style>
 </head>
 <body>
-	<h2>User registered succesfully!</h2>
-	<hr>
-	<div style="margin-top: 10px" class="form-group">						
+	<div id="loginbox" style="margin-top: 50px;"
+		class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
+			
+		<div class="panel panel-info">
+
+			<div class="panel-heading">
+			<h2>Success!</h2>
+			</div>
+			<div style="padding-top: 20px" class="panel-body">
+			<h4>User registered succesfully!</h4>
+				<div style="padding-top: 20px" class="panel-body">
+		
+					<div style="margin-top: 10px" class="form-group">						
 							<a href="${pageContext.request.contextPath}/login"
 							class="btn btn-primary"
 							role="button" aria-pressed="true">
 							Back to login
 							</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

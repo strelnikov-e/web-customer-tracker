@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luv2code.springdemo.dao.CustomerDAO;
 import com.luv2code.springdemo.entity.Customer;
+import com.luv2code.springdemo.user.CrmCustomer;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -24,8 +25,17 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional("transactionManager")
-	public void saveCustomer(Customer theCustomer) {
-		customerDAO.saveCustomer(theCustomer);
+	public void saveCustomer(CrmCustomer crmCustomer) {
+		Customer customer = new Customer();
+		// assign user details to the user object
+		if (crmCustomer.getId() != 0) {
+			customer.setId(crmCustomer.getId());
+		}
+		customer.setFirstName(crmCustomer.getFirstName());
+		customer.setLastName(crmCustomer.getLastName());
+		customer.setEmail(crmCustomer.getEmail());
+		// save user in th database
+		customerDAO.saveCustomer(customer);
 		
 	}
 
@@ -46,6 +56,22 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional("transactionManager")
 	public List<Customer> searchCustomers(String theSearchName) {
 		return customerDAO.searchCustomers(theSearchName);
+	}
+
+	@Override
+	@Transactional("transactionManager")
+	public Customer findCustomer(CrmCustomer theCustomer) {
+		List<Customer> customers = getCustomers(0);
+		
+		for (Customer customer : customers) {
+			if (customer.getFirstName().equals(theCustomer.getFirstName()) 
+					&& customer.getLastName().equals(theCustomer.getLastName())
+					&& customer.getEmail().equals(theCustomer.getEmail())
+					&& customer.getId() != theCustomer.getId()) {
+				return customer;
+			}
+		}
+		return null;
 	}
 
 }
