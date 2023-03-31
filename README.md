@@ -15,6 +15,11 @@ Application has next functions:
  - update customer (for MANAGER and ADMIN);
  - search customer by first name or last name with substrings (EMPLOYEE, MANAGER or ADMIN);
  - sort customer table by name, last name or email (EMPLOYEE, MANAGER or ADMIN).
+ 
+ To have a demo access to the app use next credentials:
+ 1) EMPLOYEE: john -  fun123
+ 2) MANAGER: mary - fun123
+ 3) ADMIN: susan - fun123
 
 Application structure:
 
