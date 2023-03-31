@@ -14,8 +14,9 @@ Application has next functions:
 
 Application structure:
 
-https://github.com/strelnikov-e/web-customer-tracker/blob/main/images/App%20structure.png?raw=true
+![structure](https://github.com/strelnikov-e/web-customer-tracker/blob/main/images/App%20structure.png?raw=true)
+
 
 Application interface:
 
-https://github.com/strelnikov-e/web-customer-tracker/blob/main/images/app-interface.png?raw=true
+![interface](https://github.com/strelnikov-e/web-customer-tracker/blob/main/images/app-interface.png?raw=true)
