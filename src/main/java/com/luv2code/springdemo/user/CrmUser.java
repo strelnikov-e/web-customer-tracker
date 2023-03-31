@@ -11,28 +11,28 @@ import com.luv2code.springdemo.validation.ValidEmail;
 public class CrmUser {
 
 	@NotNull(message="reqired field")
-	@Size(min=1, message="is required")
+	@Size(min=1, message="reqired field")
 	private String userName;
 
-	@NotNull(message="is required")
-	@Size(min=1, message="is required")
+	@NotNull(message="reqired field")
+	@Size(min=1, message="reqired field")
 	private String password;
 	
-	@NotNull(message="is required")
-	@Size(min=1, message="is required")
+	@NotNull(message="reqired field")
+	@Size(min=1, message="reqired field")
 	private String matchingPassword;
 	
-	@NotNull(message="is required")
-	@Size(min=1, message="is required")
+	@NotNull(message="reqired field")
+	@Size(min=1, message="reqired field")
 	private String firstName;
 	
-	@NotNull(message="is required")
-	@Size(min=1, message="is required")
+	@NotNull(message="reqired field")
+	@Size(min=1, message="reqired field")
 	private String lastName;
 	
 	@ValidEmail
-	@NotNull(message="is required")
-	@Size(min=1, message="is required")
+	@NotNull(message="reqired field")
+	@Size(min=1, message="reqired field")
 	private String email;
 
 	public CrmUser() {
