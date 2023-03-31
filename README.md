@@ -3,6 +3,10 @@ Customer relationship manager web app
 
 The app was created for educational purposes for Spring framework course. Base app consists of Spting MVC and Hibernate but I added Spring security and second database for user registration and login.
 
+Application uses two MySQL schemas for CUSTOMER and for USER/ROLE. SQL scripts for creating table located in "SQLscripts" directory.
+
+User interface created with Bootstrap.
+
 Application has next functions:
  - main application screen requires login and adapts to user roles;
  - registration form with form validation. All new users has EMPOYEE form by default;
